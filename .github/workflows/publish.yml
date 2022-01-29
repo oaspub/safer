@@ -1,0 +1,40 @@
+name: Publish
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  node_version: "16"
+
+jobs:
+  publish:
+    concurrency: publish
+    name: Publish Github Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.node_version }}
+          registry-url: https://npm.pkg.github.com
+          scope: '@oaspub'
+
+      - name: Build
+        run: |
+          npm install
+          npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
