@@ -1,0 +1,50 @@
+{
+  "name": "@oaspub/safer",
+  "version": "0.0.0",
+  "description": "Safer schema validation with types",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "lint": "eslint . --ignore-path .gitignore",
+    "lint:fix": "eslint . --ignore-path .gitignore --fix",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaspub/safer.git"
+  },
+  "keywords": [
+    "ajv",
+    "json",
+    "schema",
+    "typescript",
+    "types"
+  ],
+  "author": "Spencer Tuft<stuft2@oaspub.io>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/oaspub/safer/issues"
+  },
+  "homepage": "https://github.com/oaspub/safer#readme",
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.2",
+    "@types/jest": "^27.4.0",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard-with-typescript": "^21.0.1",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "jest": "^27.4.7",
+    "madge": "^5.0.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.3",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "ajv": "^8.9.0"
+  }
+}
