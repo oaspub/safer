@@ -1,4 +1,4 @@
-import { JSONSchemaType } from 'ajv'
+import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from '../safer'
 
 /* eslint-disable-next-line  @typescript-eslint/no-unused-vars */
@@ -7,16 +7,6 @@ export class SaferNumber<T extends number = number> extends Safer<number> {
 
   static from (): SaferNumber {
     return new SaferNumber()
-  }
-
-  enum (...values: number[]): this {
-    this.schema.enum = values
-    return this
-  }
-
-  literal (value: number): this {
-    this.schema.enum = [value]
-    return this
   }
 
   gte (num: number): this {

@@ -4,14 +4,18 @@ export class Safer<T = any> {
   schema: any
   isRequired: boolean = false
   defaultValue?: T
+  protected ajv: Ajv
   private validate?: ValidateFunction<T>
   private errors?: ValidateFunction<T>['errors']
 
+  constructor () {
+    this.ajv = new Ajv()
+  }
+
   parse (value: unknown): T | undefined {
     if (this.validate === undefined) {
-      const ajv = new Ajv()
       // cache validator for this schema
-      this.validate = ajv.compile(this.schema as JSONSchemaType<T>)
+      this.validate = this.ajv.compile(this.schema as JSONSchemaType<T>)
     }
     if (value === undefined && this.defaultValue !== undefined) {
       // Return the default value if the parsed value is undefined

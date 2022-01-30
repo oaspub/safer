@@ -1,4 +1,4 @@
-import { JSONSchemaType } from 'ajv'
+import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from '../safer'
 
 /* eslint-disable-next-line  @typescript-eslint/no-unused-vars */
