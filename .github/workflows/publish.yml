@@ -2,7 +2,7 @@ name: Publish
 
 on:
   push:
-    branches: [ main ]
+    tags: [ * ]
 
 env:
   node_version: "16"
