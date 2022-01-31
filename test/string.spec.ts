@@ -1,9 +1,14 @@
-import { t } from '../src'
+import { Infer, t } from '../src'
 
 const safer = t.string().max(3)
 it('should pass validation', () => {
-  expect(() => safer.try('Hi!')).not.toThrow()
+  const short: Infer<typeof safer> = 'Hi'
+  expect(() => safer.try(short)).not.toThrow()
 })
 it('should not pass validation', () => {
-  expect(() => safer.try('Hello!')).toThrow()
+  // @ts-expect-error
+  const badType: Infer<typeof safer> = 2
+  const outOfRange: Infer<typeof safer> = 'Hello!'
+  expect(() => safer.try(badType)).toThrow()
+  expect(() => safer.try(outOfRange)).toThrow()
 })

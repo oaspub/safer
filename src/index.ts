@@ -14,7 +14,9 @@ export type Not<T> = Exclude<string | number | boolean | null | any[] | Record<s
 
 export type Infer<T> =
   | T extends SaferArray<infer U> ? U[]
-    : T extends SaferObject<infer U> ? { [K in keyof U]: U[K] }
+    : T extends SaferObject<infer U> ? U extends string
+      ? Record<string, unknown>
+      : { [K in keyof U]: U[K] }
       : T extends SaferString<infer U> ? U
         : T extends SaferNumber<infer U> ? U
           : T extends SaferInteger<infer U> ? U
@@ -31,7 +33,7 @@ export const t = {
   intersection: SaferIntersection.from,
   not: SaferNot.from,
   number: SaferNumber.from,
-  object: SaferObject.from,
+  object: Object.assign(SaferObject.from, { properties: SaferObject.properties }),
   string: SaferString.from,
   union: SaferUnion.from
 }

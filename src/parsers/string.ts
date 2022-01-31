@@ -2,7 +2,7 @@ import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from '../safer'
 
 /* eslint-disable-next-line  @typescript-eslint/no-unused-vars */
-export class SaferString<T extends string = string> extends Safer<string> {
+export class SaferString<T = string> extends Safer<string> {
   schema: JSONSchemaType<string> = { type: 'string' }
 
   static from (): SaferString {
