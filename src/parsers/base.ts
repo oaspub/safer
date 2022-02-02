@@ -3,23 +3,22 @@ import Ajv, { JSONSchemaType, ValidateFunction } from 'ajv/dist/2019'
 export class Safer<T = any> {
   schema: any
   isRequired: boolean = false
-  defaultValue?: T
   protected ajv: Ajv
   private validate?: ValidateFunction<T>
   private errors?: ValidateFunction<T>['errors']
 
-  constructor () {
+  constructor (safer?: Safer<T>) {
     this.ajv = new Ajv()
+    if (safer !== undefined) {
+      this.schema = safer.schema
+      this.isRequired = safer.isRequired
+    }
   }
 
   parse (value: unknown): T | undefined {
     if (this.validate === undefined) {
       // cache validator for this schema
       this.validate = this.ajv.compile(this.schema as JSONSchemaType<T>)
-    }
-    if (value === undefined && this.defaultValue !== undefined) {
-      // Return the default value if the parsed value is undefined
-      value = this.defaultValue
     }
 
     if (this.validate(value)) {
@@ -38,15 +37,5 @@ export class Safer<T = any> {
       throw this.errors
     }
     return parsed
-  }
-
-  required (isRequired = true): this {
-    this.isRequired = isRequired
-    return this
-  }
-
-  default (value: T): this {
-    this.defaultValue = value
-    return this
   }
 }

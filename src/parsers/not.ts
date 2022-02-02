@@ -1,5 +1,5 @@
 import { JSONSchemaType } from 'ajv/dist/2019'
-import { Safer } from '../safer'
+import { Safer } from './base'
 import { Not } from '../index'
 
 export class SaferNot<T> extends Safer<Not<T>> {

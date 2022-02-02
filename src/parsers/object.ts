@@ -1,6 +1,7 @@
 import { JSONSchemaType } from 'ajv/dist/2019'
-import { Safer } from '../safer'
+import { Safer } from './base'
 import { SaferString } from './string'
+import { SaferRequired } from './required'
 
 function isEmpty (obj: Record<string, unknown> | null): boolean {
   if (obj === null) return true
@@ -15,15 +16,7 @@ function isEmpty (obj: Record<string, unknown> | null): boolean {
 export class SaferObject<T> extends Safer<T> {
   schema: JSONSchemaType<Record<string, unknown>> = { type: 'object' }
 
-  static from<T>(obj?: {[K in keyof T]: Safer<T[K]>}): SaferObject<T> {
-    return new SaferObject(obj)
-  }
-
-  static properties<T extends string = string>(str: SaferString<T>): SaferObject<T> {
-    return new SaferObject<T>(str)
-  }
-
-  constructor (obj?: {[K in keyof T]: Safer<T[K]>} | SaferString<T>) {
+  constructor (obj?: { [K in keyof T]: Safer<T[K]> } | SaferString) {
     super()
     if (obj === undefined) return
 
@@ -47,6 +40,18 @@ export class SaferObject<T> extends Safer<T> {
     if (required.length > 0) {
       this.schema.required = required
     }
+  }
+
+  static from<T extends Record<string, unknown>> (obj?: { [K in keyof T]: Safer<T[K]> }): SaferObject<T> {
+    return new SaferObject(obj)
+  }
+
+  static properties<T extends string = string> (str: SaferString<T>): SaferObject<Record<string, unknown>> {
+    return new SaferObject<Record<string, unknown>>(str)
+  }
+
+  required (): SaferRequired<T> {
+    return new SaferRequired<T>(this)
   }
 
   additional (additionalProperties = true): this {

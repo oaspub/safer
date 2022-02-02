@@ -1,7 +1,8 @@
 import { JSONSchemaType } from 'ajv/dist/2019'
-import { Safer } from '../safer'
+import { Safer } from './base'
+import { SaferRequired } from './required'
 
-export class SaferArray<T> extends Safer<any[]> {
+export class SaferArray<T> extends Safer<T[]> {
   schema: JSONSchemaType<any[]>
 
   constructor (safer: Safer<T>, contains = false) {
@@ -21,6 +22,10 @@ export class SaferArray<T> extends Safer<any[]> {
 
   static contains = function <T> (safer: Safer<T>): SaferArray<T> {
     return new SaferArray(safer, true)
+  }
+
+  required (): SaferRequired<T[]> {
+    return new SaferRequired<T[]>(this)
   }
 
   maxContains (num: number): this {

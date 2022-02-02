@@ -1,5 +1,6 @@
 import { JSONSchemaType } from 'ajv/dist/2019'
-import { Safer } from '../safer'
+import { Safer } from './base'
+import { SaferRequired } from './required'
 
 export class SaferIntersection<T, U> extends Safer<T & U> {
   schema: JSONSchemaType<any>
@@ -12,5 +13,9 @@ export class SaferIntersection<T, U> extends Safer<T & U> {
 
   static from<T, U> (first: Safer<T>, second: Safer<U>): SaferIntersection<T, U> {
     return new SaferIntersection(first, second)
+  }
+
+  required (): SaferRequired<T & U> {
+    return new SaferRequired<T & U>(this)
   }
 }

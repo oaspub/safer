@@ -1,12 +1,17 @@
 import { JSONSchemaType } from 'ajv/dist/2019'
-import { Safer } from '../safer'
+import { Safer } from './base'
+import { SaferRequired } from './required'
 
 /* eslint-disable-next-line  @typescript-eslint/no-unused-vars */
-export class SaferString<T = string> extends Safer<string> {
+export class SaferString<T extends string | undefined = string> extends Safer<string> {
   schema: JSONSchemaType<string> = { type: 'string' }
 
-  static from (): SaferString {
-    return new SaferString()
+  static from<T extends string | undefined = string | undefined>(): SaferString<T> {
+    return new SaferString<T>()
+  }
+
+  required (): SaferRequired<string> {
+    return new SaferRequired<string>(this)
   }
 
   min (num: number): this {
