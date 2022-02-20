@@ -1,10 +1,8 @@
-import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from './base'
 import { SaferRequired } from './required'
+import { SaferReference } from './reference'
 
 export class SaferIntersection<T, U> extends Safer<T & U> {
-  schema: JSONSchemaType<any>
-
   constructor (first: Safer<T>, second: Safer<U>) {
     super()
     this.schema = first.schema
@@ -17,5 +15,9 @@ export class SaferIntersection<T, U> extends Safer<T & U> {
 
   required (): SaferRequired<T & U> {
     return new SaferRequired<T & U>(this)
+  }
+
+  ref (name: string): SaferReference<T & U> {
+    return new SaferReference<T & U>(name, this)
   }
 }

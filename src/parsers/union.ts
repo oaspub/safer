@@ -1,15 +1,13 @@
-import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from './base'
 import { SaferRequired } from './required'
 import { Unpacked } from '../index'
+import { SaferReference } from './reference'
 
 export class SaferUnion<T extends readonly Safer[]> extends Safer<Unpacked<T>> {
-  schema: JSONSchemaType<any>
-
   constructor (safers: T) {
     super()
     // TODO - check number of safers
-    this.schema = { anyOf: safers.map(safer => safer.schema) } as const as JSONSchemaType<any>
+    this.schema = { anyOf: safers.map(safer => safer.schema) }
   }
 
   static from<T extends readonly Safer[]> (safers: T): SaferUnion<T> {
@@ -18,5 +16,9 @@ export class SaferUnion<T extends readonly Safer[]> extends Safer<Unpacked<T>> {
 
   required (): SaferRequired<Unpacked<T>> {
     return new SaferRequired<Unpacked<T>>(this)
+  }
+
+  ref (name: string): SaferReference<Unpacked<T>> {
+    return new SaferReference<Unpacked<T>>(name, this)
   }
 }

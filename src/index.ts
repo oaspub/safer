@@ -6,11 +6,12 @@ import {
   SaferIntersection,
   SaferNot,
   SaferNumber,
-  SaferObject,
+  SaferObject, SaferReference,
   SaferRequired,
   SaferString,
   SaferUnion
 } from './parsers'
+import { SaferRecursive } from './parsers/recursive'
 
 export type Not<T> = Exclude<string | number | boolean | null | any[] | Record<string, any>, T>
 
@@ -29,7 +30,9 @@ export type Infer<T> =
                 : T extends SaferUnion<infer U> ? Unpacked<U> | undefined
                   : T extends SaferIntersection<infer U, infer V> ? (U & V) | undefined
                     : T extends SaferRequired<infer U> ? U
-                      : never
+                      : T extends SaferReference<infer U> ? U | undefined
+                        : T extends SaferRecursive<infer U> ? U | undefined
+                          : never
 
 export const t = {
   array: Object.assign(SaferArray.from, { contains: SaferArray.contains }),
@@ -39,6 +42,8 @@ export const t = {
   not: SaferNot.from,
   number: SaferNumber.from,
   object: Object.assign(SaferObject.from, { properties: SaferObject.properties }),
+  recursive: SaferRecursive.from,
+  reference: SaferReference.from,
   string: SaferString.from,
   union: SaferUnion.from
 }

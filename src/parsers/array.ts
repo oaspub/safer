@@ -1,14 +1,14 @@
 import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from './base'
 import { SaferRequired } from './required'
+import { SaferReference } from './reference'
 
 export class SaferArray<T> extends Safer<T[]> {
-  schema: JSONSchemaType<any[]>
-
   constructor (safer: Safer<T>, contains = false) {
     super()
     // Type annotation is necessary since the items property is technically required
     this.schema = { type: 'array' } as const as JSONSchemaType<any[]>
+    safer.root = this.root ?? this
     if (contains) {
       this.schema.contains = safer.schema
     } else {
@@ -26,6 +26,10 @@ export class SaferArray<T> extends Safer<T[]> {
 
   required (): SaferRequired<T[]> {
     return new SaferRequired<T[]>(this)
+  }
+
+  ref (name: string): SaferReference<T[]> {
+    return new SaferReference<T[]>(name, this)
   }
 
   maxContains (num: number): this {

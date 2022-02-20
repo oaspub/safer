@@ -1,7 +1,7 @@
-import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from './base'
 import { SaferString } from './string'
 import { SaferRequired } from './required'
+import { SaferReference } from './reference'
 
 function isEmpty (obj: Record<string, unknown> | null): boolean {
   if (obj === null) return true
@@ -14,13 +14,15 @@ function isEmpty (obj: Record<string, unknown> | null): boolean {
 }
 
 export class SaferObject<T> extends Safer<T> {
-  schema: JSONSchemaType<Record<string, unknown>> = { type: 'object' }
-
   constructor (obj?: { [K in keyof T]: Safer<T[K]> } | SaferString) {
     super()
-    if (obj === undefined) return
+    this.schema = { type: 'object' }
+    if (obj === undefined) {
+      return
+    }
 
     if (obj instanceof SaferString) {
+      obj.root = this.root ?? this
       this.schema.propertyNames = obj.schema
       return
     }
@@ -29,6 +31,7 @@ export class SaferObject<T> extends Safer<T> {
     const required: string[] = []
 
     for (const prop in obj) {
+      obj[prop].root = this.root ?? this
       properties[prop] = obj[prop].schema
       if (obj[prop].isRequired) {
         required.push(prop)
@@ -52,6 +55,10 @@ export class SaferObject<T> extends Safer<T> {
 
   required (): SaferRequired<T> {
     return new SaferRequired<T>(this)
+  }
+
+  ref (name: string): SaferReference<T> {
+    return new SaferReference<T>(name, this)
   }
 
   additional (additionalProperties = true): this {
