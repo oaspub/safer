@@ -1,20 +1,20 @@
 import { Safer } from './base'
-import { SaferRequired } from './required'
+import { SaferOptional } from './optional'
 import { SaferReference } from './reference'
 
-/* eslint-disable-next-line  @typescript-eslint/no-unused-vars */
-export class SaferString<T extends string | undefined = string> extends Safer<string> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export class SaferString<T extends string = string> extends Safer<string> {
   constructor () {
     super()
     this.schema = { type: 'string' }
   }
 
-  static from<T extends string | undefined = string | undefined>(): SaferString<T> {
+  static from<T extends string = string>(): SaferString<T> {
     return new SaferString<T>()
   }
 
-  required (): SaferRequired<string> {
-    return new SaferRequired<string>(this)
+  optional (): SaferOptional<string> {
+    return new SaferOptional<string>(this)
   }
 
   ref (name: string): SaferReference<string> {

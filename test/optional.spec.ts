@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Infer, t } from '../src'
+import { Infer, InferTest, t } from '../src'
 
 describe('array', () => {
   it('should pass validation', () => {
-    const optional = t.array(t.string())
+    const optional = t.array(t.string()).optional()
     const _: Infer<typeof optional> = undefined
     expect(optional.isRequired).toEqual(false)
   })
   it('should not pass validation', () => {
-    const required = t.array(t.string()).required()
+    const required = t.array(t.string())
     // @ts-expect-error
     const _: Infer<typeof required> = undefined
     expect(required.isRequired).toEqual(true)
@@ -17,12 +17,12 @@ describe('array', () => {
 
 describe('boolean', () => {
   it('should pass validation', () => {
-    const optional = t.boolean()
+    const optional = t.boolean().optional()
     const _: Infer<typeof optional> = undefined
     expect(optional.isRequired).toEqual(false)
   })
   it('should not pass validation', () => {
-    const required = t.boolean().required()
+    const required = t.boolean()
     // @ts-expect-error
     const _: Infer<typeof required> = undefined
     expect(required.isRequired).toEqual(true)
@@ -31,12 +31,12 @@ describe('boolean', () => {
 
 describe('integer', () => {
   it('should pass validation', () => {
-    const optional = t.integer()
+    const optional = t.integer().optional()
     const _: Infer<typeof optional> = undefined
     expect(optional.isRequired).toEqual(false)
   })
   it('should not pass validation', () => {
-    const required = t.integer().required()
+    const required = t.integer()
     // @ts-expect-error
     const _: Infer<typeof required> = undefined
     expect(required.isRequired).toEqual(true)
@@ -45,12 +45,12 @@ describe('integer', () => {
 
 describe('intersection', () => {
   it('should pass validation', () => {
-    const optional = t.intersection(t.string(), t.string())
+    const optional = t.intersection(t.string(), t.string()).optional()
     const _: Infer<typeof optional> = undefined
     expect(optional.isRequired).toEqual(false)
   })
   it('should not pass validation', () => {
-    const required = t.intersection(t.string(), t.string()).required()
+    const required = t.intersection(t.string(), t.string())
     // @ts-expect-error
     const _: Infer<typeof required> = undefined
     expect(required.isRequired).toEqual(true)
@@ -59,12 +59,12 @@ describe('intersection', () => {
 
 describe('number', () => {
   it('should pass validation', () => {
-    const optional = t.number()
+    const optional = t.number().optional()
     const _: Infer<typeof optional> = undefined
     expect(optional.isRequired).toEqual(false)
   })
   it('should not pass validation', () => {
-    const required = t.number().required()
+    const required = t.number()
     // @ts-expect-error
     const _: Infer<typeof required> = undefined
     expect(required.isRequired).toEqual(true)
@@ -74,18 +74,18 @@ describe('number', () => {
 describe('object', () => {
   it('should pass validation', () => {
     const optional = t.object({
-      foo: t.string()
+      foo: t.string().optional()
     })
-    const _: Infer<typeof optional> = undefined
+    const _: InferTest<typeof optional> = {}
     expect(optional.isRequired).toEqual(false)
     expect(optional.schema.required).toBeUndefined()
   })
   it('should not pass validation', () => {
     const required = t.object({
-      foo: t.string().required()
-    }).required()
+      foo: t.string()
+    })
     // @ts-expect-error
-    const _: Infer<typeof required> = undefined
+    const _: Infer<typeof required> = {}
     expect(required.isRequired).toEqual(true)
     expect(required.schema.required).toBeDefined()
   })
@@ -93,12 +93,12 @@ describe('object', () => {
 
 describe('string', () => {
   it('should pass validation', () => {
-    const optional = t.string()
+    const optional = t.string().optional()
     const _: Infer<typeof optional> = undefined
     expect(optional.isRequired).toEqual(false)
   })
   it('should not pass validation', () => {
-    const required = t.string().required()
+    const required = t.string()
     // @ts-expect-error
     const _: Infer<typeof required> = undefined
     expect(required.isRequired).toEqual(true)
@@ -107,12 +107,12 @@ describe('string', () => {
 
 describe('union', () => {
   it('should pass validation', () => {
-    const optional = t.union([t.string(), t.number(), t.number()])
+    const optional = t.union([t.string(), t.number(), t.number()]).optional()
     const _: Infer<typeof optional> = undefined
     expect(optional.isRequired).toEqual(false)
   })
   it('should not pass validation', () => {
-    const required = t.union([t.string(), t.number()]).required()
+    const required = t.union([t.string(), t.number()])
     // @ts-expect-error
     const _: Infer<typeof required> = undefined
     expect(required.isRequired).toEqual(true)

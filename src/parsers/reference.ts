@@ -1,6 +1,6 @@
 import merge from 'lodash.merge'
 import { Safer } from './base'
-import { SaferRequired } from './required'
+import { SaferOptional } from './optional'
 
 export class SaferReference<T extends any> extends Safer<T> {
   constructor (name: string, safer?: Safer<T>) {
@@ -16,7 +16,7 @@ export class SaferReference<T extends any> extends Safer<T> {
     return new SaferReference<T>(name, safer)
   }
 
-  required (): SaferRequired<T> {
-    return new SaferRequired<T>(this)
+  optional (): SaferOptional<T> {
+    return new SaferOptional<T>(this)
   }
 }

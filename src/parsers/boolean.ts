@@ -1,20 +1,20 @@
 import { Safer } from './base'
-import { SaferRequired } from './required'
+import { SaferOptional } from './optional'
 import { SaferReference } from './reference'
 
-/* eslint-disable-next-line  @typescript-eslint/no-unused-vars */
-export class SaferBoolean<T extends boolean | undefined> extends Safer<boolean> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export class SaferBoolean<T extends boolean = boolean> extends Safer<boolean> {
   constructor () {
     super()
     this.schema = { type: 'boolean' }
   }
 
-  static from<T extends boolean | undefined>(): SaferBoolean<T> {
+  static from<T extends boolean = boolean>(): SaferBoolean<T> {
     return new SaferBoolean<T>()
   }
 
-  required (): SaferRequired<boolean> {
-    return new SaferRequired<boolean>(this)
+  optional (): SaferOptional<boolean> {
+    return new SaferOptional<boolean>(this)
   }
 
   ref (name: string): SaferReference<boolean> {

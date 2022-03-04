@@ -1,5 +1,5 @@
 import { Safer } from './base'
-import { SaferRequired } from './required'
+import { SaferOptional } from './optional'
 import { Unpacked } from '../index'
 import { SaferReference } from './reference'
 
@@ -14,8 +14,8 @@ export class SaferUnion<T extends readonly Safer[]> extends Safer<Unpacked<T>> {
     return new SaferUnion(safers)
   }
 
-  required (): SaferRequired<Unpacked<T>> {
-    return new SaferRequired<Unpacked<T>>(this)
+  optional (): SaferOptional<Unpacked<T>> {
+    return new SaferOptional<Unpacked<T>>(this)
   }
 
   ref (name: string): SaferReference<Unpacked<T>> {

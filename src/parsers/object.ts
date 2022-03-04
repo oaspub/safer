@@ -1,7 +1,8 @@
 import { Safer } from './base'
 import { SaferString } from './string'
-import { SaferRequired } from './required'
+import { SaferOptional } from './optional'
 import { SaferReference } from './reference'
+import { ExtractObject } from '../types'
 
 function isEmpty (obj: Record<string, unknown> | null): boolean {
   if (obj === null) return true
@@ -13,7 +14,9 @@ function isEmpty (obj: Record<string, unknown> | null): boolean {
   return true
 }
 
-export class SaferObject<T> extends Safer<T> {
+type ExtractInputType<T extends SaferString | object> = T extends SaferString ? Record<string, unknown> : ExtractObject<T>
+
+export class SaferObject<T extends Record<string, Safer> | SaferString> extends Safer<ExtractInputType<T>> {
   constructor (obj?: { [K in keyof T]: Safer<T[K]> } | SaferString) {
     super()
     this.schema = { type: 'object' }
@@ -45,16 +48,16 @@ export class SaferObject<T> extends Safer<T> {
     }
   }
 
-  static from<T extends Record<string, unknown>> (obj?: { [K in keyof T]: Safer<T[K]> }): SaferObject<T> {
+  static from<T extends Record<string, Safer> | SaferString> (obj?: { [K in keyof T]: Safer<T[K]> } | SaferString): SaferObject<T> {
     return new SaferObject(obj)
   }
 
-  static properties<T extends string = string> (str: SaferString<T>): SaferObject<Record<string, unknown>> {
-    return new SaferObject<Record<string, unknown>>(str)
+  static properties<T extends SaferString> (str: T): SaferObject<T> {
+    return new SaferObject<T>(str)
   }
 
-  required (): SaferRequired<T> {
-    return new SaferRequired<T>(this)
+  optional (): SaferOptional<T> {
+    return new SaferOptional<T>(this)
   }
 
   ref (name: string): SaferReference<T> {

@@ -1,5 +1,5 @@
 import { Safer } from './base'
-import { SaferRequired } from './required'
+import { SaferOptional } from './optional'
 import { SaferReference } from './reference'
 
 export class SaferIntersection<T, U> extends Safer<T & U> {
@@ -13,8 +13,8 @@ export class SaferIntersection<T, U> extends Safer<T & U> {
     return new SaferIntersection(first, second)
   }
 
-  required (): SaferRequired<T & U> {
-    return new SaferRequired<T & U>(this)
+  optional (): SaferOptional<T & U> {
+    return new SaferOptional<T & U>(this)
   }
 
   ref (name: string): SaferReference<T & U> {

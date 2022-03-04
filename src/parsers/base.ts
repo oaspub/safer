@@ -3,13 +3,13 @@ import merge from 'lodash.merge'
 
 export class Safer<T = any> {
   schema: Record<string, unknown> = {}
-  isRequired: boolean = false
+  isRequired: boolean = true
   protected ajv: Ajv
   private validate?: ValidateFunction<T>
   private errors?: ValidateFunction<T>['errors']
-  private _root: Safer<unknown> = this
+  private _root: Safer = this
 
-  constructor (safer?: Safer<T>, root?: Safer<unknown>) {
+  constructor (safer?: Safer<T>, root?: Safer) {
     this.ajv = new Ajv()
     if (safer !== undefined) {
       this.schema = safer.schema
@@ -20,16 +20,16 @@ export class Safer<T = any> {
     }
   }
 
-  get root (): Safer<unknown> {
-    return this._root
-  }
-
-  set root (safer: Safer<unknown>) {
+  set root (safer: Safer) {
     if (Object.hasOwnProperty.call(this._root, '$defs')) {
       merge(safer.schema, { $defs: this._root.schema.$defs })
       delete this._root.schema.$defs
     }
     this._root = safer
+  }
+
+  get root (): Safer {
+    return this._root
   }
 
   parse (value: unknown): T | undefined {

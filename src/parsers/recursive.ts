@@ -1,6 +1,7 @@
 import { Safer } from './base'
 
-export class SaferRecursive<T> extends Safer<T> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export class SaferRecursive<T = any> extends Safer<T> {
   constructor () {
     super()
     this.schema = {
@@ -8,7 +9,7 @@ export class SaferRecursive<T> extends Safer<T> {
     }
   }
 
-  static from<T> (): SaferRecursive<T> {
+  static from<T = any> (): SaferRecursive<T> {
     return new SaferRecursive<T>()
   }
 }
