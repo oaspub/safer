@@ -1,22 +1,21 @@
-import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from './base'
-import { SaferRequired } from './required'
 import { Unpacked } from '../index'
+import { SaferOptional } from './optional'
 
 export class SaferUnion<T extends readonly Safer[]> extends Safer<Unpacked<T>> {
-  schema: JSONSchemaType<any>
+  schema: any
 
   constructor (safers: T) {
     super()
     // TODO - check number of safers
-    this.schema = { anyOf: safers.map(safer => safer.schema) } as const as JSONSchemaType<any>
+    this.schema = { anyOf: safers.map(safer => safer.schema) }
   }
 
   static from<T extends readonly Safer[]> (safers: T): SaferUnion<T> {
-    return new SaferUnion(safers)
+    return new SaferUnion<T>(safers)
   }
 
-  required (): SaferRequired<Unpacked<T>> {
-    return new SaferRequired<Unpacked<T>>(this)
+  optional (): SaferOptional<Unpacked<T>> {
+    return new SaferOptional<Unpacked<T>>(this)
   }
 }

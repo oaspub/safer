@@ -1,17 +1,17 @@
 import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from './base'
-import { SaferRequired } from './required'
+import { SaferOptional } from './optional'
 
 /* eslint-disable-next-line  @typescript-eslint/no-unused-vars */
-export class SaferNumber<T extends number | undefined> extends Safer<number> {
+export class SaferNumber<T extends number = number> extends Safer<number> {
   schema: JSONSchemaType<number> = { type: 'number' }
 
-  static from<T extends number | undefined>(): SaferNumber<T> {
+  static from<T extends number = number>(): SaferNumber<number> {
     return new SaferNumber<T>()
   }
 
-  required (): SaferRequired<number> {
-    return new SaferRequired<number>(this)
+  optional (): SaferOptional<number> {
+    return new SaferOptional<number>(this)
   }
 
   gte (num: number): this {

@@ -1,7 +1,8 @@
 import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from './base'
-import { SaferString } from './string'
-import { SaferRequired } from './required'
+// import { SaferString } from './string'
+import { SaferOptional } from './optional'
+import { ExtractObject } from '../types'
 
 function isEmpty (obj: Record<string, unknown> | null): boolean {
   if (obj === null) return true
@@ -13,17 +14,17 @@ function isEmpty (obj: Record<string, unknown> | null): boolean {
   return true
 }
 
-export class SaferObject<T> extends Safer<T> {
+export class SaferObject<T extends {[K: string]: Safer}> extends Safer<ExtractObject<T>> {
   schema: JSONSchemaType<Record<string, unknown>> = { type: 'object' }
 
-  constructor (obj?: { [K in keyof T]: Safer<T[K]> } | SaferString) {
+  constructor (obj?: T) {
     super()
     if (obj === undefined) return
 
-    if (obj instanceof SaferString) {
-      this.schema.propertyNames = obj.schema
-      return
-    }
+    // if (obj instanceof SaferString) {
+    //   this.schema.propertyNames = obj.schema
+    //   return
+    // }
 
     const properties: Record<string, unknown> = {}
     const required: string[] = []
@@ -42,16 +43,16 @@ export class SaferObject<T> extends Safer<T> {
     }
   }
 
-  static from<T extends Record<string, unknown>> (obj?: { [K in keyof T]: Safer<T[K]> }): SaferObject<T> {
-    return new SaferObject(obj)
+  static from<T extends {[K: string]: Safer}> (obj?: T): SaferObject<T> {
+    return new SaferObject<T>(obj)
   }
 
-  static properties<T extends string = string> (str: SaferString<T>): SaferObject<Record<string, unknown>> {
-    return new SaferObject<Record<string, unknown>>(str)
-  }
+  // static properties<T extends string = string> (str: SaferString<T>): SaferObject<Record<string, unknown>> {
+  //   return new SaferObject<Record<string, unknown>>(str)
+  // }
 
-  required (): SaferRequired<T> {
-    return new SaferRequired<T>(this)
+  optional (): SaferOptional<ExtractObject<T>> {
+    return new SaferOptional<ExtractObject<T>>(this)
   }
 
   additional (additionalProperties = true): this {

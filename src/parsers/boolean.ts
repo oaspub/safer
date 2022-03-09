@@ -1,16 +1,16 @@
 import { JSONSchemaType } from 'ajv/dist/2019'
 import { Safer } from './base'
-import { SaferRequired } from './required'
+import { SaferOptional } from './optional'
 
 /* eslint-disable-next-line  @typescript-eslint/no-unused-vars */
-export class SaferBoolean<T extends boolean | undefined> extends Safer<boolean> {
+export class SaferBoolean<T extends boolean = boolean> extends Safer<boolean> {
   schema: JSONSchemaType<boolean> = { type: 'boolean' }
 
-  static from<T extends boolean | undefined>(): SaferBoolean<T> {
+  static from<T extends boolean = boolean>(): SaferBoolean<T> {
     return new SaferBoolean<T>()
   }
 
-  required (): SaferRequired<boolean> {
-    return new SaferRequired<boolean>(this)
+  optional (): SaferOptional<boolean> {
+    return new SaferOptional<boolean>(this)
   }
 }
