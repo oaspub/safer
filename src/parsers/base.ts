@@ -2,7 +2,7 @@ import Ajv, { JSONSchemaType, ValidateFunction } from 'ajv/dist/2019'
 
 export class Safer<T = any> {
   schema: any
-  isRequired: boolean = false
+  isRequired: boolean = true
   protected ajv: Ajv
   private validate?: ValidateFunction<T>
   private errors?: ValidateFunction<T>['errors']
